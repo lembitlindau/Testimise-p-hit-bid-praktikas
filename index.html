@@ -1,0 +1,141 @@
+<!DOCTYPE html>
+<html lang="et">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Üliõpilaste Haldamise Süsteem</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1>Üliõpilaste Haldamise Süsteem</h1>
+            <nav>
+                <button id="homeBtn" class="nav-btn active">Avaleht</button>
+                <button id="studentsBtn" class="nav-btn">Üliõpilased</button>
+                <button id="gradesBtn" class="nav-btn">Hinded</button>
+                <button id="statisticsBtn" class="nav-btn">Statistika</button>
+            </nav>
+        </header>
+
+        <main>
+            <!-- Avaleht -->
+            <section id="home" class="page active">
+                <h2>Tere tulemast</h2>
+                <div class="stats-overview">
+                    <div class="stat-card">
+                        <h3>Üliõpilasi kokku</h3>
+                        <span id="totalStudents">0</span>
+                    </div>
+                    <div class="stat-card">
+                        <h3>Keskmine hinne</h3>
+                        <span id="avgGrade">0.0</span>
+                    </div>
+                    <div class="stat-card">
+                        <h3>Läbinud (%)</h3>
+                        <span id="passPercentage">0%</span>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Üliõpilaste haldamine -->
+            <section id="students" class="page">
+                <h2>Üliõpilaste haldamine</h2>
+                
+                <div class="form-section">
+                    <h3>Lisa uus üliõpilane</h3>
+                    <form id="studentForm">
+                        <input type="text" id="firstName" placeholder="Eesnimi" required>
+                        <input type="text" id="lastName" placeholder="Perekonnanimi" required>
+                        <input type="email" id="email" placeholder="E-mail" required>
+                        <input type="text" id="studentId" placeholder="Üliõpilaskood" required>
+                        <button type="submit">Lisa üliõpilane</button>
+                    </form>
+                </div>
+
+                <div class="search-section">
+                    <input type="text" id="searchInput" placeholder="Otsi üliõpilasi...">
+                    <button id="searchBtn">Otsi</button>
+                </div>
+
+                <div class="students-list">
+                    <h3>Registreeritud üliõpilased</h3>
+                    <div id="studentsList"></div>
+                </div>
+            </section>
+
+            <!-- Hinnete haldamine -->
+            <section id="grades" class="page">
+                <h2>Hinnete haldamine</h2>
+                
+                <div class="form-section">
+                    <h3>Lisa hinne</h3>
+                    <form id="gradeForm">
+                        <select id="studentSelect" required>
+                            <option value="">Vali üliõpilane</option>
+                        </select>
+                        <input type="text" id="subject" placeholder="Aine" required>
+                        <input type="number" id="gradeValue" min="1" max="5" step="0.1" placeholder="Hinne (1-5)" required>
+                        <input type="date" id="gradeDate" required>
+                        <button type="submit">Lisa hinne</button>
+                    </form>
+                </div>
+
+                <div class="grades-list">
+                    <h3>Hinded</h3>
+                    <div id="gradesList"></div>
+                </div>
+            </section>
+
+            <!-- Statistika -->
+            <section id="statistics" class="page">
+                <h2>Statistika</h2>
+                
+                <div class="stats-detailed">
+                    <div class="chart-container">
+                        <h3>Hinnete jaotus</h3>
+                        <div id="gradeDistribution" class="chart">
+                            <div class="grade-bar" data-grade="5">
+                                <span>5: </span>
+                                <div class="bar"><span class="count">0</span></div>
+                            </div>
+                            <div class="grade-bar" data-grade="4">
+                                <span>4: </span>
+                                <div class="bar"><span class="count">0</span></div>
+                            </div>
+                            <div class="grade-bar" data-grade="3">
+                                <span>3: </span>
+                                <div class="bar"><span class="count">0</span></div>
+                            </div>
+                            <div class="grade-bar" data-grade="2">
+                                <span>2: </span>
+                                <div class="bar"><span class="count">0</span></div>
+                            </div>
+                            <div class="grade-bar" data-grade="1">
+                                <span>1: </span>
+                                <div class="bar"><span class="count">0</span></div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="performance-summary">
+                        <h3>Täpsem statistika</h3>
+                        <div id="detailedStats">
+                            <p>Kõrgeim hinne: <span id="highestGrade">-</span></p>
+                            <p>Madalaim hinne: <span id="lowestGrade">-</span></p>
+                            <p>Aktiivseim üliõpilane: <span id="mostActive">-</span></p>
+                            <p>Populaarseim aine: <span id="popularSubject">-</span></p>
+                        </div>
+                    </div>
+                </div>
+            </section>
+        </main>
+
+        <footer>
+            <p>&copy; 2025 Üliõpilaste Haldamise Süsteem</p>
+        </footer>
+    </div>
+
+    <script src="script.js"></script>
+</body>
+</html>

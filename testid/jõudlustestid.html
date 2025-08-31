@@ -1,0 +1,367 @@
+<!DOCTYPE html>
+<html lang="et">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Jõudlustestid - Performance Testing</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            max-width: 1000px;
+            margin: 0 auto;
+            padding: 20px;
+            background-color: #f5f5f5;
+        }
+        .container {
+            background: white;
+            border-radius: 10px;
+            padding: 30px;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+        }
+        h1 {
+            color: #667eea;
+            text-align: center;
+        }
+        .test-section {
+            margin-bottom: 30px;
+            padding: 20px;
+            border: 1px solid #e9ecef;
+            border-radius: 8px;
+            background: #f8f9fa;
+        }
+        .test-result {
+            margin: 10px 0;
+            padding: 10px;
+            border-radius: 5px;
+            background: white;
+        }
+        .performance-metric {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin: 10px 0;
+            padding: 10px;
+            background: #e3f2fd;
+            border-radius: 5px;
+        }
+        .metric-value {
+            font-weight: bold;
+            color: #1976d2;
+        }
+        button {
+            background: linear-gradient(45deg, #667eea, #764ba2);
+            color: white;
+            border: none;
+            padding: 15px 30px;
+            border-radius: 8px;
+            font-size: 1.1em;
+            cursor: pointer;
+            margin: 10px;
+        }
+        .chart {
+            width: 100%;
+            height: 200px;
+            border: 1px solid #ddd;
+            margin: 20px 0;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>⚡ Jõudlustestid</h1>
+        
+        <div class="test-section">
+            <h2>Lehe Laadimiskiirus</h2>
+            <button onclick="testPageLoadSpeed()">Testi Laadimiskiirust</button>
+            <div id="pageLoadResults"></div>
+        </div>
+
+        <div class="test-section">
+            <h2>Suurte Andmehulkade Jõudlus</h2>
+            <button onclick="testLargeDataset()">Testi Suurt Andmehulka</button>
+            <div id="largeDataResults"></div>
+        </div>
+
+        <div class="test-section">
+            <h2>UI Reaktsioonikiirus</h2>
+            <button onclick="testUIResponsiveness()">Testi UI Kiirust</button>
+            <div id="uiResponseResults"></div>
+        </div>
+
+        <div class="test-section">
+            <h2>Mälu Kasutus</h2>
+            <button onclick="testMemoryUsage()">Testi Mälu Kasutust</button>
+            <div id="memoryResults"></div>
+        </div>
+    </div>
+
+    <script src="../script.js"></script>
+    <script>
+        let sms = null;
+
+        // Käivita süsteem
+        document.addEventListener('DOMContentLoaded', () => {
+            sms = new StudentManagementSystem();
+        });
+
+        function testPageLoadSpeed() {
+            const results = document.getElementById('pageLoadResults');
+            results.innerHTML = '<p>🔄 Testin lehe laadimiskiirust...</p>';
+            
+            // Simuleerib lehe uuesti laadimist
+            const startTime = performance.now();
+            
+            // Simuleerib DOM content loaded sündmust
+            setTimeout(() => {
+                const endTime = performance.now();
+                const loadTime = endTime - startTime;
+                
+                let status = 'Hea';
+                let color = 'green';
+                
+                if (loadTime > 2000) {
+                    status = 'Aeglane';
+                    color = 'red';
+                } else if (loadTime > 1000) {
+                    status = 'Keskmine';
+                    color = 'orange';
+                }
+                
+                results.innerHTML = `
+                    <div class="performance-metric">
+                        <span>Lehe laadimisaeg:</span>
+                        <span class="metric-value" style="color: ${color}">${loadTime.toFixed(2)}ms - ${status}</span>
+                    </div>
+                    <div class="performance-metric">
+                        <span>DOM elemendid:</span>
+                        <span class="metric-value">${document.querySelectorAll('*').length} elementi</span>
+                    </div>
+                    <div class="performance-metric">
+                        <span>CSS failid:</span>
+                        <span class="metric-value">${document.querySelectorAll('link[rel="stylesheet"]').length} faili</span>
+                    </div>
+                `;
+            }, 100);
+        }
+
+        function testLargeDataset() {
+            const results = document.getElementById('largeDataResults');
+            results.innerHTML = '<p>🔄 Testin suurte andmehulkade jõudlust...</p>';
+            
+            // Test 1: Lisa 1000 üliõpilast
+            const startTime1 = performance.now();
+            const testStudents = [];
+            
+            for (let i = 0; i < 1000; i++) {
+                testStudents.push({
+                    id: Date.now() + i,
+                    firstName: `Test${i}`,
+                    lastName: `Kasutaja${i}`,
+                    email: `test${i}@ut.ee`,
+                    studentId: String(100000 + i),
+                    registrationDate: new Date().toISOString().split('T')[0]
+                });
+            }
+            
+            const endTime1 = performance.now();
+            const addTime = endTime1 - startTime1;
+            
+            // Test 2: Lisa 5000 hinnet
+            const startTime2 = performance.now();
+            const testGrades = [];
+            
+            for (let i = 0; i < 1000; i++) {
+                for (let j = 0; j < 5; j++) {
+                    testGrades.push({
+                        id: Date.now() + i * 1000 + j,
+                        studentId: testStudents[i].id,
+                        subject: `Aine${j}`,
+                        value: Math.random() * 4 + 1,
+                        date: new Date().toISOString().split('T')[0]
+                    });
+                }
+            }
+            
+            const endTime2 = performance.now();
+            const gradeTime = endTime2 - startTime2;
+            
+            // Test 3: Arvuta statistika
+            const startTime3 = performance.now();
+            const avgGrade = testGrades.reduce((sum, grade) => sum + grade.value, 0) / testGrades.length;
+            const endTime3 = performance.now();
+            const statsTime = endTime3 - startTime3;
+            
+            // Test 4: Otsing
+            const startTime4 = performance.now();
+            const searchResults = testStudents.filter(student => 
+                student.firstName.toLowerCase().includes('test5'));
+            const endTime4 = performance.now();
+            const searchTime = endTime4 - startTime4;
+            
+            results.innerHTML = `
+                <div class="performance-metric">
+                    <span>1000 üliõpilase lisamine:</span>
+                    <span class="metric-value">${addTime.toFixed(2)}ms</span>
+                </div>
+                <div class="performance-metric">
+                    <span>5000 hinde lisamine:</span>
+                    <span class="metric-value">${gradeTime.toFixed(2)}ms</span>
+                </div>
+                <div class="performance-metric">
+                    <span>Statistika arvutamine:</span>
+                    <span class="metric-value">${statsTime.toFixed(2)}ms</span>
+                </div>
+                <div class="performance-metric">
+                    <span>Otsing 1000 kirje hulgas:</span>
+                    <span class="metric-value">${searchTime.toFixed(2)}ms (${searchResults.length} tulemust)</span>
+                </div>
+                <div class="performance-metric">
+                    <span>Keskmine hinne:</span>
+                    <span class="metric-value">${avgGrade.toFixed(2)}</span>
+                </div>
+            `;
+        }
+
+        function testUIResponsiveness() {
+            const results = document.getElementById('uiResponseResults');
+            results.innerHTML = '<p>🔄 Testin UI reaktsioonikiirust...</p>';
+            
+            const tests = [];
+            
+            // Test 1: Navigeerimise kiirus
+            const nav1Start = performance.now();
+            // Simuleerib navigeerimist
+            document.querySelector('.nav-btn').click();
+            const nav1End = performance.now();
+            tests.push(['Navigeerimine lehelt lehele', nav1End - nav1Start]);
+            
+            // Test 2: Vormi täitmise kiirus
+            const form1Start = performance.now();
+            const nameInput = document.getElementById('firstName');
+            if (nameInput) {
+                nameInput.value = 'Test Nimi';
+                nameInput.dispatchEvent(new Event('input'));
+            }
+            const form1End = performance.now();
+            tests.push(['Vormi välja täitmine', form1End - form1Start]);
+            
+            // Test 3: Otsingu kiirus
+            const search1Start = performance.now();
+            const searchInput = document.getElementById('searchInput');
+            if (searchInput) {
+                searchInput.value = 'test';
+                searchInput.dispatchEvent(new Event('keyup'));
+            }
+            const search1End = performance.now();
+            tests.push(['Otsingufunktsiooni aktiveerimine', search1End - search1Start]);
+            
+            // Test 4: Statistika uuendamise kiirus
+            const stats1Start = performance.now();
+            if (sms) {
+                sms.updateStats();
+            }
+            const stats1End = performance.now();
+            tests.push(['Statistika uuendamine', stats1End - stats1Start]);
+            
+            let testResults = '';
+            tests.forEach(([testName, time]) => {
+                let status = 'Hea';
+                let color = 'green';
+                
+                if (time > 100) {
+                    status = 'Aeglane';
+                    color = 'red';
+                } else if (time > 50) {
+                    status = 'Keskmine';
+                    color = 'orange';
+                }
+                
+                testResults += `
+                    <div class="performance-metric">
+                        <span>${testName}:</span>
+                        <span class="metric-value" style="color: ${color}">${time.toFixed(2)}ms - ${status}</span>
+                    </div>
+                `;
+            });
+            
+            results.innerHTML = testResults;
+        }
+
+        function testMemoryUsage() {
+            const results = document.getElementById('memoryResults');
+            results.innerHTML = '<p>🔄 Testin mälu kasutust...</p>';
+            
+            let memoryInfo = '';
+            
+            // Kontrolli, kas performance.memory on saadaval
+            if (performance.memory) {
+                const used = performance.memory.usedJSHeapSize;
+                const total = performance.memory.totalJSHeapSize;
+                const limit = performance.memory.jsHeapSizeLimit;
+                
+                memoryInfo = `
+                    <div class="performance-metric">
+                        <span>Kasutatud mälu:</span>
+                        <span class="metric-value">${(used / 1024 / 1024).toFixed(2)} MB</span>
+                    </div>
+                    <div class="performance-metric">
+                        <span>Kogumälu:</span>
+                        <span class="metric-value">${(total / 1024 / 1024).toFixed(2)} MB</span>
+                    </div>
+                    <div class="performance-metric">
+                        <span>Mälu limiit:</span>
+                        <span class="metric-value">${(limit / 1024 / 1024).toFixed(2)} MB</span>
+                    </div>
+                    <div class="performance-metric">
+                        <span>Kasutusprotsent:</span>
+                        <span class="metric-value">${((used / limit) * 100).toFixed(2)}%</span>
+                    </div>
+                `;
+            } else {
+                memoryInfo = '<p>Mälu informatsioon pole selles brauseris saadaval.</p>';
+            }
+            
+            // Test localStorage kasutust
+            let localStorageSize = 0;
+            for (let key in localStorage) {
+                if (localStorage.hasOwnProperty(key)) {
+                    localStorageSize += localStorage[key].length;
+                }
+            }
+            
+            memoryInfo += `
+                <div class="performance-metric">
+                    <span>LocalStorage suurus:</span>
+                    <span class="metric-value">${(localStorageSize / 1024).toFixed(2)} KB</span>
+                </div>
+                <div class="performance-metric">
+                    <span>DOM elementide arv:</span>
+                    <span class="metric-value">${document.querySelectorAll('*').length}</span>
+                </div>
+            `;
+            
+            results.innerHTML = memoryInfo;
+        }
+
+        // Automaatne jõudluse monitooring
+        function startPerformanceMonitoring() {
+            setInterval(() => {
+                if (performance.memory) {
+                    const used = performance.memory.usedJSHeapSize;
+                    const limit = performance.memory.jsHeapSizeLimit;
+                    const usage = (used / limit) * 100;
+                    
+                    if (usage > 80) {
+                        console.warn(`Kõrge mälu kasutus: ${usage.toFixed(2)}%`);
+                    }
+                }
+            }, 5000);
+        }
+
+        // Käivita monitooring
+        document.addEventListener('DOMContentLoaded', () => {
+            startPerformanceMonitoring();
+        });
+    </script>
+</body>
+</html>
