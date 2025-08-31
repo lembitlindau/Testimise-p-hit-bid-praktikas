@@ -116,15 +116,3 @@ Kinnistada teadmisi tarkvaratestimise põhitüüpidest ja rakendada neid valitud
 - [ ] Automatiseeritud UI testid (Selenium/Playwright)
 - [ ] Continous Integration setup
 
-## 📞 Kontakt
-
-**Autor**: [Teie Nimi]  
-**E-mail**: [teie.email@ut.ee]  
-**Kursus**: Tarkvaratestimise alused  
-**Õppeasutus**: Tartu Ülikool  
-
----
-
-**Tähtaeg**: 13.05.2025  
-**Versioon**: 1.0  
-**Viimati uuendatud**: [Kuupäev]
